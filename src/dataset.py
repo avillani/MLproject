@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 file_path = '../dataset/sistemato.csv'
 
@@ -15,20 +16,28 @@ try:
     # Controlla la presenza di valori nulli
     print(data.isnull().sum())
 
-    # Esegui una modifica (ad esempio, rimuovi una colonna)
+    # Rimuovi una colonna)
     if 'State' in data.columns:
         data.drop(columns=['State'], inplace=True)
     print("Dati modificati:\n", data.head())
 
+    # Filtra solo i dati relativi all'Europa
+    data_europe = data[data['Region'] == 'Europe']
+
+    # Visualizza le prime righe del nuovo dataset
+    print(data_europe.head())
+
+    # Sostituisci -99 con NaN
+    data.replace(-99, np.nan, inplace=True)
+
     # Salva il file modificato
-    output_path = '../dataset/sistemato.csv' # Cambia nome se necessario
+    output_path = '../dataset/sistemato.csv'
     print(f"Salvataggio nel file: {output_path}")
     data.to_csv(output_path, index=False)
     print("File salvato correttamente!")
 
-    # Leggi di nuovo il file per confermare
-    reloaded_data = pd.read_csv(output_path)
-    print("Dati ricaricati:\n", reloaded_data.head())
+    # Controlla i valori nulli
+    print(data.isnull().sum())
 
 except FileNotFoundError:
     print("Errore: il file non è stato trovato")
