@@ -39,6 +39,11 @@ try:
     # Controlla i valori nulli
     print(data.isnull().sum())
 
+    data['AvgTemperature'] = (data['AvgTemperature'] - 32) * 5 / 9
+    data.to_csv(output_path, index=False)
+
+    print(data.head())
+
 except FileNotFoundError:
     print("Errore: il file non è stato trovato")
 except pd.errors.ParserError:
