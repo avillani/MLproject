@@ -39,8 +39,34 @@ try:
     # Controlla i valori nulli
     print(data.isnull().sum())
 
+    # Conversione dati Fahrenheit in Celsius
     data['AvgTemperature'] = (data['AvgTemperature'] - 32) * 5 / 9
     data.to_csv(output_path, index=False)
+
+    # Restituisce le tuple dove abbiamo valori nulli per la temperatura
+    # e poi conta queste tuple raggruppandole sull'attributo City
+    print(data[data['AvgTemperature'].isna()]['City'].value_counts())
+
+    # Conta le istanze per ogni città PRIMA della rimozione
+    city_counts_before = data["City"].value_counts()
+
+    # Conta le istanze per ogni città che hanno un valore nullo nella temperatura
+    city_null_counts = data[data["AvgTemperature"].isna()]["City"].value_counts()
+
+    # Confronto per le città con più valori nulli
+    cities_to_check = ["Hamburg", "Tirana"]
+    for city in cities_to_check:
+        total = city_counts_before.get(city, 0)
+        missing = city_null_counts.get(city, 0)
+        remaining = total - missing
+        print(f"{city}: totale {total}, nulli {missing}, rimasti {remaining}")
+
+    # Vedere la distribuzione complessiva PRIMA e DOPO (virtualmente, senza cancellare)
+    print("\nDistribuzione città PRIMA della rimozione:")
+    print(city_counts_before.describe())
+
+    print("\nDistribuzione città DOPO (ipotetica) se rimuovessimo i NaN:")
+    print((city_counts_before - city_null_counts).dropna().describe())
 
     print(data.head())
 
