@@ -68,6 +68,16 @@ try:
     print("\nDistribuzione città DOPO (ipotetica) se rimuovessimo i NaN:")
     print((city_counts_before - city_null_counts).dropna().describe())
 
+    # Rimuove tutte le tuple dove City ha valore Hamburg
+    data = data[data['City'] != 'Hamburg']
+
+    # Rimuove solo le tuple con valori nulli nelle altre città
+    data = data.dropna(subset=['AvgTemperature'])
+
+    # Conferma dei cambiamenti
+    print("Dati rimanenti dopo la pulizia:")
+    print(data['City'].value_counts())
+
     print(data.head())
 
 except FileNotFoundError:
