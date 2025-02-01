@@ -22,34 +22,17 @@ try:
     print("Dati modificati:\n", data.head())
 
     # Filtra solo i dati relativi all'Europa
-    data_europe = data[data['Region'] == 'Europe']
-
-    # Visualizza le prime righe del nuovo dataset
-    print(data_europe.head())
-
-    # Rimuovi Region
-    def rimuovi_Region(data):
-        data.drop(columns=['Region'], inplace=True)
-
-    # Verifica che la colonna sia stata eliminata
-    print("\nElenco delle colonne rimanenti nel dataset:")
-    print(data.columns)
+    data = data[data['Region'] == 'Europe']
 
     # Sostituisci -99 con NaN
     data.replace(-99, np.nan, inplace=True)
-
-    # Salva il file modificato
-    output_path = '../dataset/sistemato.csv'
-    print(f"Salvataggio nel file: {output_path}")
-    data.to_csv(output_path, index=False)
-    print("File salvato correttamente!")
 
     # Controlla i valori nulli
     print(data.isnull().sum())
 
 
     # Conversione dati Fahrenheit in Celsius
-    if 'Converted' not in data.columns:  # Controlla se la conversione è già stata fatta
+    if 'Converted' not in data.columns:   # Controlla se la conversione è già stata fatta
         data['AvgTemperature'] = (data['AvgTemperature'] - 32) * 5 / 9
         data['Converted'] = True  # Aggiunge una colonna per segnare che è stato convertito
         print("Conversione effettuata.")
@@ -91,6 +74,12 @@ try:
     # Conferma dei cambiamenti
     print("Dati rimanenti dopo la pulizia:")
     print(data['City'].value_counts())
+
+    # Salva il file modificato
+    output_path = '../dataset/sistemato.csv'
+    print(f"Salvataggio nel file: {output_path}")
+    data.to_csv(output_path, index=False)
+    print("File salvato correttamente!")
 
     print(data.head())
 
