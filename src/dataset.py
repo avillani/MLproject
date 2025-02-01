@@ -16,7 +16,7 @@ try:
     # Controlla la presenza di valori nulli
     print(data.isnull().sum())
 
-    # Rimuovi una colonna)
+    # Rimuovi una colonna
     if 'State' in data.columns:
         data.drop(columns=['State'], inplace=True)
     print("Dati modificati:\n", data.head())
@@ -26,6 +26,14 @@ try:
 
     # Visualizza le prime righe del nuovo dataset
     print(data_europe.head())
+
+    # Rimuovi Region
+    def rimuovi_Region(data):
+        data.drop(columns=['Region'], inplace=True)
+
+    # Verifica che la colonna sia stata eliminata
+    print("\nElenco delle colonne rimanenti nel dataset:")
+    print(data.columns)
 
     # Sostituisci -99 con NaN
     data.replace(-99, np.nan, inplace=True)
@@ -39,9 +47,15 @@ try:
     # Controlla i valori nulli
     print(data.isnull().sum())
 
+
     # Conversione dati Fahrenheit in Celsius
-    data['AvgTemperature'] = (data['AvgTemperature'] - 32) * 5 / 9
-    data.to_csv(output_path, index=False)
+    if 'Converted' not in data.columns:  # Controlla se la conversione è già stata fatta
+        data['AvgTemperature'] = (data['AvgTemperature'] - 32) * 5 / 9
+        data['Converted'] = True  # Aggiunge una colonna per segnare che è stato convertito
+        print("Conversione effettuata.")
+    else:
+        print("I dati sono già stati convertiti in Celsius.")
+
 
     # Restituisce le tuple dove abbiamo valori nulli per la temperatura
     # e poi conta queste tuple raggruppandole sull'attributo City
