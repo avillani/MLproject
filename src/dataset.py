@@ -21,8 +21,12 @@ try:
         data.drop(columns=['State'], inplace=True)
     print("Dati modificati:\n", data.head())
 
-    # Filtra solo i dati relativi all'Europa
-    data = data[data['Region'] == 'Europe']
+    # Controlla la presenza della colonna 'Region' prima di filtrare
+    if 'Region' in data.columns:
+        data = data[data['Region'] == 'Europe']
+        data.drop(columns=['Region'], inplace=True)
+    else:
+        print("Colonna 'Region' non trovata.")
 
     # Sostituisci -99 con NaN
     data.replace(-99, np.nan, inplace=True)
