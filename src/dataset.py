@@ -87,6 +87,21 @@ try:
 
     print(data.head())
 
+    if 'Year' in data.columns:
+        # Verifica i valori unici presenti nella colonna 'Year'
+        print("Valori unici nella colonna 'Year':")
+        print(data['Year'].unique())
+
+        # Conta le occorrenze per ogni anno
+        print("\nDistribuzione degli anni:")
+        print(data['Year'].value_counts().sort_index())  # Ordinato per anno
+
+        # Verifica se ci sono valori fuori dall'intervallo previsto (ad esempio, anni molto lontani)
+        print("\nStatistica descrittiva sulla colonna 'Year':")
+        print(data['Year'].describe())
+    else:
+        print("Colonna 'Year' non trovata nel dataset.")
+
 except FileNotFoundError:
     print("Errore: il file non è stato trovato")
 except pd.errors.ParserError:
