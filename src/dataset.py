@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from matplotlib import pyplot as plt
 
 file_path = '../dataset/sistemato.csv'
 
@@ -79,11 +80,54 @@ try:
     print("Dati rimanenti dopo la pulizia:")
     print(data['City'].value_counts())
 
+    # Conta il numero di istanze per ogni città
+    city_counts = data['City'].value_counts()
+
+    # Soglia massima di istanze per città
+    MAX_INSTANCES = 9000
+
+    # Ordinare il dataset per città e data (senza creare una colonna data)
+    data = data.sort_values(by=["City", "Year", "Month", "Day"], ascending=[True, False, False, False])
+
+    # Sottocampionare: per ogni città, teniamo solo le ultime MAX_INSTANCES righe
+    data = data.groupby("City").head(MAX_INSTANCES)
+
+    # Stampiamo la nuova distribuzione
+    print(data["City"].value_counts())
+    print(data["City"].value_counts().describe())
+
+    # Seleziona solo le città con almeno 4000 istanze
+    cities_to_keep = city_counts[city_counts >= 4000].index
+
+    # Filtra il dataset mantenendo solo le città con almeno 4000 istanze
+    data = data[data['City'].isin(cities_to_keep)]
+
+    # Verifica il risultato
+    print("Città rimanenti:", data['City'].unique())
+    print("Dimensione del dataset dopo il filtro:", data.shape)
+    print(data["City"].value_counts())
+    print(data["City"].value_counts().describe())
+
     # Salva il file modificato
-    output_path = '../dataset/sistemato.csv'
-    print(f"Salvataggio nel file: {output_path}")
-    data.to_csv(output_path, index=False)
+    print(f"Salvataggio nel file: {file_path}")
+    data.to_csv(file_path, index=False)
     print("File salvato correttamente!")
+
+    new_city_counts = data["City"].value_counts()
+
+    # Visualizza la distribuzione
+    plt.figure(figsize=(12, 8))
+    new_city_counts.plot(kind='bar')
+    plt.xlabel("Città")
+    plt.ylabel("Numero di istanze")
+    plt.title("Distribuzione delle istanze per città")
+    plt.xticks(rotation=90)
+    plt.show()
+
+    # Stampa città con pochi dati
+    threshold = 2000  # Numero minimo di istanze per città (puoi modificarlo)
+    cities_low_data = city_counts[city_counts < threshold]
+    print(f"Città con meno di {threshold} istanze:\n", cities_low_data)
 
     print(data.head())
 
