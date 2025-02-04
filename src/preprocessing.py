@@ -26,18 +26,18 @@ data[['AvgTemperature', 'Year']] = scaler.fit_transform(data[['AvgTemperature', 
 print(data[['AvgTemperature', 'Year']].head())
 
 # Encoding ciclico per il mese
-data['Month_sin'] = np.sin(2 * np.pi * data['Month'] / 12)
-data['Month_cos'] = np.cos(2 * np.pi * data['Month'] / 12)
+#data['Month_sin'] = np.sin(2 * np.pi * data['Month'] / 12)
+#data['Month_cos'] = np.cos(2 * np.pi * data['Month'] / 12)
 
 # Encoding ciclico per il giorno
-data['Day_sin'] = np.sin(2 * np.pi * data['Day'] / 31)
-data['Day_cos'] = np.cos(2 * np.pi * data['Day'] / 31)
-
-# Verifica i risultati
-print(data[['Month', 'Month_sin', 'Month_cos', 'Day', 'Day_sin', 'Day_cos']].head())
+#data['Day_sin'] = np.sin(2 * np.pi * data['Day'] / 31)
+#data['Day_cos'] = np.cos(2 * np.pi * data['Day'] / 31)
 
 # Elimina le colonne mese e giorno originali
-data.drop(columns=['Month', 'Day'], inplace=True)
+#data.drop(columns=['Month', 'Day'], inplace=True)
+
+data.drop(columns=["Country"], inplace=True)
+
 
 # Salva il file modificato
 print(f"Salvataggio nel file: {file_path}")
