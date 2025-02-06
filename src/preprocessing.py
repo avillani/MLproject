@@ -36,10 +36,25 @@ print(data[['AvgTemperature', 'Year']].head())
 # Elimina le colonne mese e giorno originali
 #data.drop(columns=['Month', 'Day'], inplace=True)
 
-data.drop(columns=["Country"], inplace=True)
+#data.drop(columns=["Country"], inplace=True)
 
 
 # Salva il file modificato
 print(f"Salvataggio nel file: {file_path}")
 data.to_csv(file_path, index=False)
 print("File salvato correttamente!")
+
+# Selezioniamo il 80% dei dati più vecchi per il training e il 20% più recenti per il test
+train_size = int(0.8 * len(data))  # 80% dei dati
+df_train = data[:train_size]  # Training set
+df_test = data[train_size:]    # Test set
+
+# Separa le variabili di input (X) e target (y) per il training e test set
+X_train = df_train.drop(columns=['AvgTemperature'])
+y_train = df_train['AvgTemperature']
+X_test = df_test.drop(columns=['AvgTemperature'])
+y_test = df_test['AvgTemperature']
+
+# Verifica delle dimensioni
+print(f'Training set size: {X_train.shape}')
+print(f'Test set size: {X_test.shape}')
