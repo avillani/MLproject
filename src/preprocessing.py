@@ -25,6 +25,19 @@ data[['AvgTemperature', 'Year']] = scaler.fit_transform(data[['AvgTemperature', 
 # Verifica i primi valori per vedere come sono stati trasformati
 print(data[['AvgTemperature', 'Year']].head())
 
+# Label Encoding per le stagioni
+def assign_season(month):
+    if month in [12, 1, 2]:
+        return 0  # Inverno
+    elif month in [3, 4, 5]:
+        return 1  # Primavera
+    elif month in [6, 7, 8]:
+        return 2  # Estate
+    else:
+        return 3  # Autunno
+
+data["Season"] = data["Month"].apply(assign_season)
+
 # Encoding ciclico per il mese
 #data['Month_sin'] = np.sin(2 * np.pi * data['Month'] / 12)
 #data['Month_cos'] = np.cos(2 * np.pi * data['Month'] / 12)
