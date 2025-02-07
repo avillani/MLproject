@@ -36,7 +36,7 @@ def assign_season(month):
     else:
         return 3  # Autunno
 
-data["Season"] = data["Month"].apply(assign_season)
+#data["Season"] = data["Month"].apply(assign_season)
 
 # Encoding ciclico per il mese
 #data['Month_sin'] = np.sin(2 * np.pi * data['Month'] / 12)
@@ -51,6 +51,7 @@ data["Season"] = data["Month"].apply(assign_season)
 
 #data.drop(columns=["Country"], inplace=True)
 
+#data.drop(columns=["City"], inplace=True)
 
 # Salva il file modificato
 print(f"Salvataggio nel file: {file_path}")
@@ -67,6 +68,10 @@ X_train = df_train.drop(columns=['AvgTemperature'])
 y_train = df_train['AvgTemperature']
 X_test = df_test.drop(columns=['AvgTemperature'])
 y_test = df_test['AvgTemperature']
+
+# Salvare i dataset in formato CSV
+df_train.to_csv("../dataset/train.csv", index=False)
+df_test.to_csv("../dataset/test.csv", index=False)
 
 # Verifica delle dimensioni
 print(f'Training set size: {X_train.shape}')
