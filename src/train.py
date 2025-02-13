@@ -65,7 +65,7 @@ rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
 rf_model.fit(X_train, y_train)
 
 # Fare previsioni sul test set
-y_pred_rf = rf_model.predict(X_test)
+rf_pred = rf_model.predict(X_test)
 
 # Calcolare le metriche di valutazione
 mae_rf = mean_absolute_error(y_test, y_pred_rf)
@@ -77,8 +77,6 @@ print(f"Random Forest - Mean Absolute Error (MAE): {mae_rf:.4f}")
 print(f"Random Forest - Root Mean Squared Error (RMSE): {rmse_rf:.4f}")
 print(f"Random Forest - R² Score: {r2_rf:.4f}")
 
-# Salvare il modello addestrato
-joblib.dump(rf_model, "models/random-forest_regression.pkl")
 
 
 # Creiamo il modello XGBoost
@@ -107,8 +105,6 @@ print(f'XGBoost - Mean Absolute Error (MAE): {mae_xgb:.4f}')
 print(f'XGBoost - Root Mean Squared Error (RMSE): {rmse_xgb:.4f}')
 print(f'XGBoost - R² Score: {r2_xgb:.4f}')
 
-# Salviamo il modello
-joblib.dump(xgb_model, "models/xgboost_model.pkl")
 
 # Definiamo gli iperparametri da testare
 param_dist = {
@@ -153,3 +149,68 @@ r2_xgb = r2_score(y_test, y_pred_xgb)
 print(f'XGBoost Ottimizzato - MAE: {mae_xgb:.4f}')
 print(f'XGBoost Ottimizzato - RMSE: {rmse_xgb:.4f}')
 print(f'XGBoost Ottimizzato - R² Score: {r2_xgb:.4f}')
+
+# Parametri da testare per il modello XGBoost
+param_dist = {
+    'n_estimators': np.arange(100, 500, 100),  # Numero di alberi
+    'learning_rate': np.linspace(0.01, 0.2, 5),  # Tasso di apprendimento
+    'max_depth': np.arange(3, 10, 1),  # Profondità massima degli alberi
+    'subsample': np.linspace(0.6, 1, 5),  # Percentuale di dati usati in ogni iterazione
+    'colsample_bytree': np.linspace(0.6, 1, 5),  # Percentuale di feature per albero
+    'gamma': np.linspace(0, 2, 5),  # Aggiunto gamma per controllare la complessità
+    'reg_alpha': np.logspace(-3, 1, 5),  # Aggiunto reg_alpha per la regolarizzazione
+    'reg_lambda': np.logspace(-3, 1, 5)  # Aggiunto reg_lambda per la regolarizzazione
+}
+
+# Inizializziamo il modello base XGBoost
+xgb_model = XGBRegressor(objective='reg:squarederror', random_state=42)
+
+# Randomized Search con validazione incrociata
+random_search = RandomizedSearchCV(
+    estimator=xgb_model,
+    param_distributions=param_dist,
+    n_iter=30,  # Numero di combinazioni da provare (ridotto)
+    scoring='neg_mean_absolute_error',  # Ottimizziamo per MAE
+    cv=3,  # Validazione incrociata a 3 fold
+    verbose=2,
+    random_state=42,
+    n_jobs=-1
+)
+
+# Eseguiamo la ricerca
+random_search.fit(X_train, y_train)
+
+# Migliori iperparametri trovati
+best_params = random_search.best_params_
+print("Migliori iperparametri trovati:", best_params)
+
+# Alleniamo il modello con i migliori iperparametri
+best_xgb = XGBRegressor(**best_params, objective='reg:squarederror', random_state=42)
+best_xgb.fit(X_train, y_train)
+
+# Valutiamo il modello
+xgb_pred = best_xgb.predict(X_test)
+mae_xgb = mean_absolute_error(y_test, y_pred_xgb)
+rmse_xgb = np.sqrt(mean_squared_error(y_test, y_pred_xgb))
+r2_xgb = r2_score(y_test, y_pred_xgb)
+
+print(f'XGBoost Ottimizzato - MAE: {mae_xgb:.4f}')
+print(f'XGBoost Ottimizzato - RMSE: {rmse_xgb:.4f}')
+print(f'XGBoost Ottimizzato - R² Score: {r2_xgb:.4f}')
+
+# Combinazione pesata
+ensemble_predictions = 0.60 * y_pred_xgb + 0.40 * rf_pred
+
+# Calcolare il MAE per l'ensemble
+ensemble_mae = mean_absolute_error(y_test, ensemble_predictions)
+
+# Calcolare il RMSE per l'ensemble
+ensemble_rmse = np.sqrt(mean_squared_error(y_test, ensemble_predictions))
+
+print(f"Ensemble MAE: {ensemble_mae}")
+print(f"Ensemble RMSE: {ensemble_rmse}")
+ensemble_r2 = r2_score(y_test, ensemble_predictions)
+print("Ensemble R²:", ensemble_r2)
+
+# Salviamo il modello ensemble
+joblib.dump((xgb_model, rf_model, 0.6, 0.4), "models/ensemble_model.pkl", compress=7)

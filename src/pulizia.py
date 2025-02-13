@@ -146,6 +146,13 @@ try:
     else:
         print("Colonna 'Year' non trovata nel dataset.")
 
+    mean_temp = data['AvgTemperature'].mean()
+    std_temp = data['AvgTemperature'].std()
+
+    print("Media:", mean_temp)
+    print("Deviazione Standard:", std_temp)
+
+
 except FileNotFoundError:
     print("Errore: il file non è stato trovato")
 except pd.errors.ParserError:

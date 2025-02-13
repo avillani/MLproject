@@ -39,19 +39,19 @@ def assign_season(month):
 #data["Season"] = data["Month"].apply(assign_season)
 
 # Encoding ciclico per il mese
-#data['Month_sin'] = np.sin(2 * np.pi * data['Month'] / 12)
-#data['Month_cos'] = np.cos(2 * np.pi * data['Month'] / 12)
+data['Month_sin'] = np.sin(2 * np.pi * data['Month'] / 12)
+data['Month_cos'] = np.cos(2 * np.pi * data['Month'] / 12)
 
 # Encoding ciclico per il giorno
-#data['Day_sin'] = np.sin(2 * np.pi * data['Day'] / 31)
-#data['Day_cos'] = np.cos(2 * np.pi * data['Day'] / 31)
+data['Day_sin'] = np.sin(2 * np.pi * data['Day'] / 31)
+data['Day_cos'] = np.cos(2 * np.pi * data['Day'] / 31)
 
 # Elimina le colonne mese e giorno originali
-#data.drop(columns=['Month', 'Day'], inplace=True)
+data.drop(columns=['Month', 'Day'], inplace=True)
 
-#data.drop(columns=["Country"], inplace=True)
+data.drop(columns=["Country"], inplace=True)
 
-#data.drop(columns=["City"], inplace=True)
+data.drop(columns=["City"], inplace=True)
 
 # Salva il file modificato
 print(f"Salvataggio nel file: {file_path}")
@@ -76,3 +76,4 @@ df_test.to_csv("../dataset/test.csv", index=False)
 # Verifica delle dimensioni
 print(f'Training set size: {X_train.shape}')
 print(f'Test set size: {X_test.shape}')
+
