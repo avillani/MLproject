@@ -63,7 +63,7 @@ try:
         remaining = total - missing
         print(f"{city}: totale {total}, nulli {missing}, rimasti {remaining}")
 
-    # Vedere la distribuzione complessiva PRIMA e DOPO (virtualmente, senza cancellare)
+    # Vedere la distribuzione complessiva PRIMA e DOPO (senza cancellare)
     print("\nDistribuzione città PRIMA della rimozione:")
     print(city_counts_before.describe())
 
