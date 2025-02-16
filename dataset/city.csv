@@ -1,3 +1,41 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e7634ca0724118478a158854fe2e59b1d11e9b748c9cb747ef25a726868b3005
-size 430
+City,City_encoded
+Tirana,35
+Vienna,36
+Minsk,21
+Brussels,9
+Sofia,32
+Zagreb,38
+Nicosia,24
+Prague,27
+Copenhagen,12
+Helsinki,15
+Paris,26
+Bordeaux,7
+Munich,23
+Tbilisi,34
+Athens,1
+Budapest,11
+Reykjavik,28
+Dublin,13
+Milan,20
+Rome,30
+Riga,29
+Skopje,31
+Amsterdam,0
+Oslo,25
+Warsaw,37
+Lisbon,17
+Bucharest,10
+Moscow,22
+Bratislava,8
+Barcelona,2
+Bilbao,6
+Madrid,19
+Stockholm,33
+Bern,5
+Geneva,14
+Zurich,39
+Kiev,16
+Belfast,3
+London,18
+Belgrade,4
